@@ -1,7 +1,7 @@
 import random
 random_number = random.randint(0, 1)
 
-if random_number == 0:
-    print("No!")
-else:
+if random_number:
     print("Yes!")
+else:
+    print("No!")
