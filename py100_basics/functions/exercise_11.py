@@ -35,6 +35,18 @@ def local_greet(locale) -> str:
         case _:
             return "Get out of here!"
 
+### LAUNCH SCHOOL SOLUTION ########
+#    match (language, region):
+#        case ('en', 'US'):
+#            return 'Hey!'
+#        case ('en', 'GB'):
+#            return 'Hello!'
+#        case ('en', 'AU'):
+#            return 'Howdy!'
+#        case _:
+#            return greet(language)
+####################################
+
 print(local_greet('en_US.UTF-8'))       # Hey!
 print(local_greet('en_GB.UTF-8'))       # Hello!
 print(local_greet('en_AU.UTF-8'))       # Howdy!
