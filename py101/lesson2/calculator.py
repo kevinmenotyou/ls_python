@@ -1,3 +1,15 @@
+import json
+
+# Open the JSON file for reading
+with open('calculator_messages.json', 'r') as file:
+    ALL_DATA = json.load(file)
+
+# Now 'data' contains the contents of the JSON file as a Python dictionary or list
+
+##############################
+###  Function Definitions
+##############################
+
 def prompt(message):
     print(f"==> {message}")
 
@@ -11,34 +23,42 @@ def invalid_number(number_str):
 
 playAgain = True
 
+prompt("Choose either 'en' for English or 'fr' pour francais:")
+language = input()
+while language not in ["en", "fr"]:
+    prompt("Invalid input. Please try again.")
+    language = input()
+
+# Set Language
+MESSAGES = ALL_DATA[language]
+
 while playAgain:
-    print('Welcome to Calculator!')
+    print(MESSAGES["welcome"])
 
     # Ask the user for the first number.
-    prompt("What's the first number?")
+    prompt(MESSAGES["first_number"])
     number1 = input()
 
     while invalid_number(number1):
-        prompt("Hmm... that doesn't look like a valid number.")
+        prompt(MESSAGES["invalid_number"])
         number1 = input()
 
     # Ask the user for the second number.
-    prompt("What's the second number?")
+    prompt(MESSAGES["second_number"])
     number2 = input()
 
     while invalid_number(number2):
-        prompt("Hmm... that doesn't look like a valid number.")
+        prompt(MESSAGES["invalid_number"])
         number2 = input()
 
     print(f'{number1} {number2}')
 
     # Ask the user for an operation to perform.
-    prompt("""What operation would you like to perform?
-    1) Add 2) Subtract 3) Multiply 4) Divide""")
+    prompt(MESSAGES["choose_operator"])
     operation = input()
 
     while operation not in ["1", "2", "3", "4"]:
-        prompt('You must choose 1, 2, 3, or 4')
+        prompt(MESSAGES["invalid_operator"])
         operation = input()
 
     # Perform the operation on the two numbers.
@@ -53,12 +73,12 @@ while playAgain:
             output = int(number1) / int(number2)
 
     # Print the result to the terminal.
-    print(f"The result is: {output}")
+    print(f"{MESSAGES["display_output"]} {output}")
 
     # Ask to play again
-    prompt(f"Would you like to play again?")
+    prompt(MESSAGES["play_again"])
     response = input()
-    if (response == "Y" or response == "Yes" or response == "yes" or response == "y"):
+    if (response in MESSAGES["play_again_responses"]):
         playAgain = True
     else:
         playAgain = False

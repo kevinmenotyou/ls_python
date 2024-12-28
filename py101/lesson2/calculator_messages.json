@@ -1,0 +1,24 @@
+{
+    "en" : {
+        "welcome" : "Welcome to Calculator!",
+        "first_number" : "What's the first number?",
+        "second_number" : "What's the second number?",
+        "invalid_number" : "Hmm... that doesn't look like a valid number.",
+        "choose_operator" : "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+        "invalid_operator" : "You must choose 1, 2, 3, or 4",
+        "display_output": "The result is:",
+        "play_again" : "Would you like to play again?",
+        "play_again_responses" : ["Y","Yes", "yes", "y"]
+    },
+    "fr" : {
+        "welcome" : "Bienvenue chez le jeu 'Calculatrice'!",
+        "first_number" : "Quel est le premier chiffre?",
+        "second_number" : "Quel est le deuxieme chiffre?",
+        "invalid_number" : "Hmm... cela ne parait pas comme un chiffre.",
+        "choose_operator" : "Que aimeriez vous faire?\n1) Addition 2) Sustraction 3) Multiplication 4) Division",
+        "invalid_operator" : "Vous doivez choisir soit 1, 2, 3, ou 4",
+        "display_output": "Le resultat est:",
+        "play_again" : "Aimeriez vous jouez encore une foie?",
+        "play_again_responses" : ["O","Oui", "oui", "n"]
+    }
+}
