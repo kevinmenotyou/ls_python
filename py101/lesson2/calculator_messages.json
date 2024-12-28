@@ -19,6 +19,6 @@
         "invalid_operator" : "Vous doivez choisir soit 1, 2, 3, ou 4",
         "display_output": "Le resultat est:",
         "play_again" : "Aimeriez vous jouez encore une foie?",
-        "play_again_responses" : ["O","Oui", "oui", "n"]
+        "play_again_responses" : ["O","Oui", "oui", "o"]
     }
 }

@@ -15,13 +15,17 @@ def prompt(message):
 
 def invalid_number(number_str):
     try:
-        int(number_str)
+        float(number_str)
     except ValueError:
         return True
 
     return False
 
 playAgain = True
+
+###############################
+### Language Settings
+###############################
 
 prompt("Choose either 'en' for English or 'fr' pour francais:")
 language = input()
@@ -31,6 +35,10 @@ while language not in ["en", "fr"]:
 
 # Set Language
 MESSAGES = ALL_DATA[language]
+
+###############################
+### Game Loop
+###############################
 
 while playAgain:
     print(MESSAGES["welcome"])
@@ -64,13 +72,13 @@ while playAgain:
     # Perform the operation on the two numbers.
     match operation:
         case '1':   # '1' represents addition
-            output = int(number1) + int(number2)
+            output = float(number1) + float(number2)
         case '2': # '2' represents subtraction
-            output = int(number1) - int(number2)
+            output = float(number1) - float(number2)
         case '3': # '3' represents multiplication
-            output = int(number1) * int(number2)
+            output = float(number1) * float(number2)
         case '4': # '4' represents division
-            output = int(number1) / int(number2)
+            output = float(number1) / float(number2)
 
     # Print the result to the terminal.
     print(f"{MESSAGES["display_output"]} {output}")
