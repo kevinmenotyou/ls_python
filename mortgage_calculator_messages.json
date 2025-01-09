@@ -1,0 +1,7 @@
+{
+    "welcome_message" : "Welcome to Mortgage Calculator!",
+    "loan_question": "Please enter the loan amount:",
+    "annual_rate_question": "Please enter the Annual Percentage Rate (APR):",
+    "loan_duration_question": "Please enter the loan duration in years:",
+    "calculate_again_question": "Would you like to make another calculation?"
+}
