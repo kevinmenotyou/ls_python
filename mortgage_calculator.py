@@ -50,10 +50,10 @@ while (True):
     prompt (DATA["loan_duration_question"])
     loan_duration_years = int(input())
     loan_duration_months = get_loan_duration_months(loan_duration_years)
-    print (f"The loan duration in months is: {loan_duration_months}")
+    print (f"{DATA["print_loan_duration_result"]} {loan_duration_months}")
 
     monthly_payment = get_monthly_payment(loan_amount, monthly_interest_rate, loan_duration_months)
-    print (f"The monthly payment is: {monthly_payment}")
+    print (f"{DATA["print_monthly_payment_result"]} {monthly_payment}")
 
     prompt (DATA["calculate_again_question"])
     answer = input()
