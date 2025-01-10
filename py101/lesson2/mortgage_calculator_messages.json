@@ -1,10 +1,11 @@
 {
-    "welcome_message" : "Welcome to Mortgage Calculator!",
-    "loan_question": "Please enter the loan amount:",
-    "annual_rate_question": "Please enter the Annual Percentage Rate (APR):",
-    "loan_duration_question": "Please enter the loan duration in years:",
+    "annual_rate_question": "Please enter the Annual Percentage Rate (APR) in % (e.g. 4.5):",
     "calculate_again_question": "Would you like to make another calculation?",
+    "invalid_number_answer": "Input was invalid. Please enter a valid number.",
+    "loan_duration_question": "Please enter the loan duration in years:",
+    "loan_question": "Please enter the loan amount in $:",
     "print_loan_duration_result": "The loan duration in months is:",
-    "print_monthly_payment_result": "The monthly payment is:",
-    "valid_play_again_answers": ["Y", "y", "yes", "Yes", "yes"]
+    "print_monthly_payment_result": "The monthly payment is: $",
+    "valid_play_again_answers": ["Y", "y", "yes", "Yes", "yes"],
+    "welcome_message" : "Welcome to Mortgage Calculator!"
 }

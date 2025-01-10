@@ -36,10 +36,11 @@ def get_monthly_payment(loan_amount, monthly_interest_rate, loan_duration_months
 
 def is_valid_numeric_input(input):
     try:
-        float(input)
+        number = float(input)
+        if (number > 0)
         return True
     except:
-        print("Input was invalid. Input was not a valid number.")
+        print("Input was invalid. Please enter a valid number greater than 0.")
         return False
 
 def get_valid_numeric_input():
@@ -56,16 +57,16 @@ while (True):
     loan_amount = get_valid_numeric_input()
 
     print(DATA["annual_rate_question"])
-    annual_percentage_rate = float(input())
-    monthly_interest_rate = get_monthly_interest_rate(annual_percentage_rate)
+    annual_interest_rate = get_valid_numeric_input() / 100
+    monthly_interest_rate = get_monthly_interest_rate(annual_interest_rate)
 
     print (DATA["loan_duration_question"])
-    loan_duration_years = float(input())
+    loan_duration_years = get_valid_numeric_input()
     loan_duration_months = get_loan_duration_months(loan_duration_years)
     print (f"{DATA["print_loan_duration_result"]} {loan_duration_months}")
 
     monthly_payment = get_monthly_payment(loan_amount, monthly_interest_rate, loan_duration_months)
-    print (f"{DATA["print_monthly_payment_result"]} {monthly_payment}")
+    print (f"{DATA["print_monthly_payment_result"]} {round(monthly_payment, 2)}")
 
     print (DATA["calculate_again_question"])
     answer = input()
