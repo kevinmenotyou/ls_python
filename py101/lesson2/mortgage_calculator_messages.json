@@ -1,6 +1,8 @@
 {
     "annual_rate_question": "Please enter the Annual Percentage Rate (APR) in % (e.g. 4.5):",
     "calculate_again_question": "Would you like to make another calculation?",
+    "error_handling_0": "Please enter a number greater than 0.",
+    "error_handling_invalid_number": "Input was invalid. Please enter a valid number.",
     "invalid_number_answer": "Input was invalid. Please enter a valid number.",
     "loan_duration_question": "Please enter the loan duration in years:",
     "loan_question": "Please enter the loan amount in $:",
