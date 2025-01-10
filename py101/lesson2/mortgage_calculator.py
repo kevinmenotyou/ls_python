@@ -23,7 +23,7 @@ def get_monthly_payment(
 def is_valid_numeric_input(my_input):
     try:
         number = float(my_input)
-        if (number <= 0):
+        if number <= 0:
             print(DATA["error_handling_0"])
             return False
         return True
@@ -33,7 +33,7 @@ def is_valid_numeric_input(my_input):
 
 def get_valid_numeric_input():
     my_input = input("==> ")
-    if (is_valid_numeric_input(my_input)):
+    if is_valid_numeric_input(my_input):
         return float(my_input)
     return get_valid_numeric_input()
 
@@ -41,7 +41,7 @@ def get_valid_numeric_input():
 
 print(DATA["welcome_message"])
 
-while (True):
+while True:
     print(DATA["loan_question"])
     loan_amount = get_valid_numeric_input()
 
