@@ -1,4 +1,5 @@
 import json
+import os
 
 # DEFINITIONS #
 
@@ -37,30 +38,33 @@ def get_valid_numeric_input():
         return float(my_input)
     return get_valid_numeric_input()
 
-# MAIN #
+def main_loop():
+    while True:
+        print(DATA["welcome_message"])
 
-print(DATA["welcome_message"])
+        print(DATA["loan_question"])
+        loan_amount = get_valid_numeric_input()
 
-while True:
-    print(DATA["loan_question"])
-    loan_amount = get_valid_numeric_input()
+        print(DATA["annual_rate_question"])
+        annual_interest_rate = get_valid_numeric_input() / 100
+        monthly_interest_rate = get_monthly_interest_rate(annual_interest_rate)
 
-    print(DATA["annual_rate_question"])
-    annual_interest_rate = get_valid_numeric_input() / 100
-    monthly_interest_rate = get_monthly_interest_rate(annual_interest_rate)
+        print (DATA["loan_duration_question"])
+        loan_duration_years = get_valid_numeric_input()
+        loan_duration_months = get_loan_duration_months(loan_duration_years)
+        print (f"{DATA["print_loan_duration_result"]} {loan_duration_months}")
 
-    print (DATA["loan_duration_question"])
-    loan_duration_years = get_valid_numeric_input()
-    loan_duration_months = get_loan_duration_months(loan_duration_years)
-    print (f"{DATA["print_loan_duration_result"]} {loan_duration_months}")
+        monthly_payment = get_monthly_payment(
+            loan_amount, monthly_interest_rate, loan_duration_months)
+        rounded_amount = round(monthly_payment, 2)
+        print (f"{DATA["print_monthly_payment_result"]} {rounded_amount}")
 
-    monthly_payment = get_monthly_payment(
-        loan_amount, monthly_interest_rate, loan_duration_months)
-    rounded_amount = round(monthly_payment, 2)
-    print (f"{DATA["print_monthly_payment_result"]} {rounded_amount}")
+        print (DATA["calculate_again_question"])
+        answer = input()
 
-    print (DATA["calculate_again_question"])
-    answer = input()
+        if answer not in DATA["valid_play_again_answers"]:
+            break
 
-    if answer not in DATA["valid_play_again_answers"]:
-        break
+        os.system('cls||clear')
+
+main_loop()
