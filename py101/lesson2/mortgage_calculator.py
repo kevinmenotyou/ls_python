@@ -34,10 +34,10 @@ def get_monthly_payment(
 def is_valid_numeric_input(my_input):
     try:
         number = float(my_input)
-        if (number > 0):
-            return True
-        print(DATA["error_handling_0"])
-        return False
+        if (number <= 0):
+            print(DATA["error_handling_0"])
+            return False
+        return True
     except ValueError:
         print(DATA["error_handling_invalid_number"])
         return False
