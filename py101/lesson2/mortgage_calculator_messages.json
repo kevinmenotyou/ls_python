@@ -5,5 +5,6 @@
     "loan_duration_question": "Please enter the loan duration in years:",
     "calculate_again_question": "Would you like to make another calculation?",
     "print_loan_duration_result": "The loan duration in months is:",
-    "print_monthly_payment_result": "The monthly payment is:"
+    "print_monthly_payment_result": "The monthly payment is:",
+    "valid_play_again_answers": ["Y", "y", "yes", "Yes", "yes"]
 }

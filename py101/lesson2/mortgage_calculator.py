@@ -25,9 +25,6 @@ with open('mortgage_calculator_messages.json', 'r') as file:
 
 MONTHS_IN_YEAR = 12
 
-def prompt(message):
-    print (f"==> {message}")
-
 def get_loan_duration_months(loan_duration_years):
     return loan_duration_years * MONTHS_IN_YEAR
 
@@ -37,26 +34,41 @@ def get_monthly_interest_rate(annual_percentage_rate):
 def get_monthly_payment(loan_amount, monthly_interest_rate, loan_duration_months):
     return loan_amount * (monthly_interest_rate / (1 - (1 + monthly_interest_rate) ** (-loan_duration_months)))
 
+def is_valid_numeric_input(input):
+    try:
+        float(input)
+        return True
+    except:
+        print("Input was invalid. Input was not a valid number.")
+        return False
+
+def get_valid_numeric_input():
+    my_input = input("==> ")
+    if (is_valid_numeric_input(my_input)):
+        return float(my_input)
+    else:
+        return get_valid_numeric_input()
+
 print(DATA["welcome_message"])
 
 while (True):
-    prompt(DATA["loan_question"])
-    loan_amount = float(input())
+    print(DATA["loan_question"])
+    loan_amount = get_valid_numeric_input()
 
-    prompt(DATA["annual_rate_question"])
+    print(DATA["annual_rate_question"])
     annual_percentage_rate = float(input())
     monthly_interest_rate = get_monthly_interest_rate(annual_percentage_rate)
 
-    prompt (DATA["loan_duration_question"])
-    loan_duration_years = int(input())
+    print (DATA["loan_duration_question"])
+    loan_duration_years = float(input())
     loan_duration_months = get_loan_duration_months(loan_duration_years)
     print (f"{DATA["print_loan_duration_result"]} {loan_duration_months}")
 
     monthly_payment = get_monthly_payment(loan_amount, monthly_interest_rate, loan_duration_months)
     print (f"{DATA["print_monthly_payment_result"]} {monthly_payment}")
 
-    prompt (DATA["calculate_again_question"])
+    print (DATA["calculate_again_question"])
     answer = input()
 
-    #if answer not valid:
-    break
+    if answer not in DATA["valid_play_again_answers"]:
+        break
