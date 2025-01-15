@@ -120,7 +120,7 @@ def get_player_selection(choice_list):
     player_selection = input().casefold()
 
     while player_selection not in valid_selections:
-        prompt("That's not a valid choice")
+        prompt(MESSAGE['invalid_choice'])
         player_selection = input().casefold()
 
     return player_selection
