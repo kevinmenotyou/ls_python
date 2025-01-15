@@ -38,11 +38,11 @@ class Choice:
         return my_list
 
     @staticmethod
-    def get_all_valid_options_from_choice_list(all_choices):
+    def get_all_valid_choices_from_list(all_choices):
         my_list = []
         for choice in all_choices:
-            for input in choice.inputs_list:
-                my_list.append(input)
+            for my_input in choice.inputs_list:
+                my_list.append(my_input)
         return my_list
 
 class Player:
@@ -79,11 +79,17 @@ def get_choice_by_input(my_list, my_input):
     # next will return the first object from list
     # filter evaluates function in parameter1 for every item in parameter2
     # and returns a new list where parameter1 returned true
-    my_lambda = lambda choice: my_input.casefold() in choice.inputs_list
-    return next(filter(my_lambda, my_list))
+
+    for item in my_list:
+        if my_input in item.name or my_input in item.inputs_list:
+            return item
+
+    raise NotImplementedError("There is a bug and I haven't fixed it!")
 
 def display_winner(player_choice, computer_choice, player, computer):
-    prompt(f"You chose {player_choice.name}, computer chose {computer_choice.name}")
+    player_name = player_choice.name
+    computer_name = computer_choice.name
+    prompt(f"You chose {player_name}, computer chose {computer_name}")
 
     if player_choice.wins_against(computer_choice.name):
         player.wins_round(player_choice)
@@ -99,16 +105,17 @@ def prompt(message):
 
 def init_data():
     return [
-        Choice(ROCK, [SCISSORS, LIZARD], [PAPER, SPOCK], [ROCK, "r"]), 
-        Choice(PAPER, [ROCK, SPOCK], [SCISSORS, LIZARD], [PAPER, "p"]), 
+        Choice(ROCK, [SCISSORS, LIZARD], [PAPER, SPOCK], [ROCK, "r"]),
+        Choice(PAPER, [ROCK, SPOCK], [SCISSORS, LIZARD], [PAPER, "p"]),
         Choice(SCISSORS, [PAPER, LIZARD], [ROCK, SPOCK], [SCISSORS, "sc"]),
         Choice(LIZARD, [SPOCK, PAPER], [SCISSORS, ROCK], [LIZARD, "l"]),
         Choice(SPOCK, [SCISSORS, ROCK], [LIZARD, PAPER], [SPOCK, "sp"])]
 
-def get_player_selection(my_list_of_choices):
-    valid_selections = Choice.get_all_valid_options_from_choice_list(my_list_of_choices)
-    
-    prompt(f'Choose one: {get_formatted_string_of_valid_inputs(my_list_of_choices)}')
+def get_player_selection(choice_list):
+
+    valid_selections = Choice.get_all_valid_choices_from_list(choice_list)
+
+    prompt(f'Choose one: {get_formatted_string_of_valid_inputs(choice_list)}')
     player_selection = input().casefold()
 
     while player_selection not in valid_selections:
@@ -117,7 +124,7 @@ def get_player_selection(my_list_of_choices):
 
     return player_selection
 
-def is_game_over(computer, player):
+def is_game_over(player, computer):
     return computer.score >= MAX_VICTORIES or player.score >= MAX_VICTORIES
 
 def get_play_again():
@@ -127,8 +134,7 @@ def get_play_again():
 
         if answer.startswith('n') or answer.startswith('y'):
             break
-        else:
-            prompt("That's not a valid choice")
+        prompt("That's not a valid choice")
 
     if answer[0].casefold() == 'n':
         return False
@@ -161,25 +167,27 @@ def main_loop():
 
         player.reset()
         computer.reset()
-        print(f"Welcome to rock, paper, scissors, lizard, spock -- best of {BEST_OF} rounds takes home the prize!")
+        print(  "Welcome to rock, paper, scissors, lizard, spock",
+                f"-- best of {BEST_OF} rounds takes home the prize!")
 
-        while (not is_game_over(player, computer)):
-            player_selection = get_player_selection(choices)
-            player_choice = get_choice_by_input(choices, player_selection)
+        while not is_game_over(player, computer):
+            player_choice = get_player_selection(choices)
+            player_choice = get_choice_by_input(choices, player_choice)
 
-            computer_selection = random.choice(Choice.get_all_names_from_list(choices))
-            computer_choice = get_choice_by_input(choices, computer_selection)
+            computer_choice = random.choice(
+                Choice.get_all_names_from_list(choices))
+            computer_choice = get_choice_by_input(choices, computer_choice)
 
             display_winner(player_choice, computer_choice, player, computer)
 
-        print ("That was the last round, press enter to calculate the score...")
+        print ("That was the last round, press enter to calculate the score.")
         input()
         os.system('clear')
 
         display_best_of_winner(player, computer)
 
         play_again = get_play_again()
-    
+
     print ("Thank you for playing!")
 
 main_loop()
