@@ -1,6 +1,7 @@
+import json
 import math
-import random
 import os
+import random
 
 # CONSTANTS #
 
@@ -62,7 +63,7 @@ class Player:
         for choice in self.choice_list:
             my_winning_choice_names_list.append(choice.name)
         my_winning_choices = ", ".join(my_winning_choice_names_list)
-        print(f"The winning choices were: {my_winning_choices}")
+        print(f"{MESSAGE['winning_choices']} {my_winning_choices}")
 
 # FUNCTIONS #
 
@@ -84,7 +85,7 @@ def get_choice_by_input(my_list, my_input):
         if my_input in item.name or my_input in item.inputs_list:
             return item
 
-    raise NotImplementedError("There is a bug and I haven't fixed it!")
+    raise NotImplementedError(MESSAGE['bug'])
 
 def display_winner(player_choice, computer_choice, player, computer):
     player_name = player_choice.name
@@ -93,12 +94,12 @@ def display_winner(player_choice, computer_choice, player, computer):
 
     if player_choice.wins_against(computer_choice.name):
         player.wins_round(player_choice)
-        prompt("You win!")
+        prompt(MESSAGE['player_wins'])
     elif computer_choice.wins_against(player_choice.name):
         computer.wins_round(computer_choice)
-        prompt("Computer wins!")
+        prompt(MESSAGE['computer_wins'])
     else:
-        prompt("It's a tie! This round won't count...")
+        prompt(MESSAGE['tie_result'])
 
 def prompt(message):
     print(f"==> {message}")
@@ -129,12 +130,12 @@ def is_game_over(player, computer):
 
 def get_play_again():
     while True:
-        prompt("Do you want to play again (y/n)?")
+        prompt(MESSAGE['play_again'])
         answer = input().casefold()
 
         if answer.startswith('n') or answer.startswith('y'):
             break
-        prompt("That's not a valid choice")
+        prompt(MESSAGE['invalid_choice'])
 
     if answer[0].casefold() == 'n':
         return False
@@ -145,14 +146,14 @@ def display_best_of_winner(player, computer):
     print (f"Computer won {computer.score} rounds!")
 
     if (player.score > computer.score):
-        print("**********************")
+        print (MESSAGE['stars'])
         print ("Player wins!")
         player.print_winning_choices()
     else:
-        print("**********************")
+        print (MESSAGE['stars'])
         print ("Computer wins!")
         computer.print_winning_choices()
-    print("**********************")
+    print(MESSAGE['stars'])
 
 # MAIN LOOP #
 
@@ -162,13 +163,16 @@ def main_loop():
     player = Player()
     computer = Player()
 
+    with open('rock_paper_scissors.json', 'r') as file:
+        global MESSAGE
+        MESSAGE = json.load(file)
+
     play_again = True
     while play_again:
 
         player.reset()
         computer.reset()
-        print(  "Welcome to rock, paper, scissors, lizard, spock",
-                f"-- best of {BEST_OF} rounds takes home the prize!")
+        print(MESSAGE['welcome'])
 
         while not is_game_over(player, computer):
             player_choice = get_player_selection(choices)
@@ -180,7 +184,7 @@ def main_loop():
 
             display_winner(player_choice, computer_choice, player, computer)
 
-        print ("That was the last round, press enter to calculate the score.")
+        print(MESSAGE['last_round'])
         input()
         os.system('clear')
 
@@ -188,6 +192,6 @@ def main_loop():
 
         play_again = get_play_again()
 
-    print ("Thank you for playing!")
+    print (MESSAGE['thank_you'])
 
 main_loop()

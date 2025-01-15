@@ -1,0 +1,13 @@
+{
+    "bug": "There is a bug and I haven't fixed it!",
+    "computer_wins": "Computer wins!",
+    "invalid_choice": "That's not a valid choice.",
+    "last_round": "That was the last round, press enter to calculate the score.",
+    "play_again": "Do you want to play again (y/n)?",
+    "player_wins": "You win!",
+    "stars": "**********************",
+    "thank_you": "Welcome to Mortgage Calculator!",
+    "tie_result": "It's a tie! This round won't count...",
+    "welcome": "Welcome to rock, paper, scissors, lizard, spock -- best of five rounds takes home the prize!",
+    "winning_choices": "The winning choices were:"
+}
