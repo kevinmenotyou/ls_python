@@ -6,3 +6,7 @@ def my_function(my_string):
 
 print(my_function(str1))
 print(my_function(str2))
+
+#better solution:
+print(str1.endswith("!"))  # True
+print(str2.endswith("!"))  # False
