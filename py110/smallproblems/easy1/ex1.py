@@ -64,7 +64,7 @@ def prompt_for_number(number):
 def print_ordinal(number):
     return ORDINAL[f"{number}"]
 
-def __main__():
+def main():
 
     my_numbers = []
 
@@ -78,7 +78,8 @@ def __main__():
     else:
         print(f"{sixth_number} is not in {",".join(my_numbers)}.")
 
-__main__()
+if __name__ == "__main__":
+    main()
 
 
     
