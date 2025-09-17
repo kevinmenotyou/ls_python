@@ -7,7 +7,9 @@ dict1 = {
 
 vowels = 'aeiou'
 
-list_of_vowels = [letter for value_list in dict1.values() for list_item in value_list for letter in list_item if letter in vowels]
+list_of_vowels = [letter for value in dict1.values() 
+                    for word in value 
+                    for letter in word if letter in vowels]
 
 print(list_of_vowels)
 # ['e', 'u', 'i', 'o', 'o', 'u', 'e', 'o', 'e', 'e', 'a', 'o']
