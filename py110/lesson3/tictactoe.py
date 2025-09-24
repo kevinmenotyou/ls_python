@@ -1,9 +1,21 @@
 import os
+import pdb
 import random
 
 INITIAL_MARKER = ' '
 HUMAN_MARKER = 'X'
 COMPUTER_MARKER = 'O'
+
+def join_or(my_array, my_delimitter = ", ", my_word = "or"):
+    if len(my_array) == 0:
+        return ""
+
+    if len(my_array) == 1:
+        return my_array[0]
+
+    copy_array = [str(integer) for integer in my_array]
+    my_last_element = copy_array.pop()
+    return f"{my_delimitter.join(copy_array)} {my_word} {my_last_element}"
 
 def prompt(message):
     print(f'==> {message}')
@@ -36,7 +48,7 @@ def player_chooses_square(board):
     while True:
         valid_choices = [str(num) for num in empty_squares(board)]
         print(valid_choices)
-        prompt('Choose a square (1-9):')
+        prompt(f'Choose a square ({join_or(valid_choices)}):')
         square = input().strip()
         if square in valid_choices:
             break
