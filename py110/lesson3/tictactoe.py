@@ -1,3 +1,4 @@
+import math
 import os
 import pdb
 import random
@@ -5,6 +6,16 @@ import random
 INITIAL_MARKER = ' '
 HUMAN_MARKER = 'X'
 COMPUTER_MARKER = 'O'
+TOTAL_NUMBER_OF_MATCHES = 5
+PLAYER = 'Player'
+COMPUTER = 'Computer'
+TIE = 'Tie'
+
+#p 
+#e 
+#d 
+#a 
+#c 
 
 def join_or(my_array, my_delimitter = ", ", my_word = "or"):
     if len(my_array) == 0:
@@ -76,38 +87,118 @@ def detect_winner(board):
         if (board[sq1] == HUMAN_MARKER
                and board[sq2] == HUMAN_MARKER
                and board[sq3] == HUMAN_MARKER):
-            return 'Player'
+            return PLAYER
         elif (board[sq1] == COMPUTER_MARKER
                   and board[sq2] == COMPUTER_MARKER
                   and board[sq3] == COMPUTER_MARKER):
-            return 'Computer'
+            return COMPUTER
 
     return None
 
 def someone_won(board):
     return bool(detect_winner(board))
 
-def play_tic_tac_toe():
-    while True:
-        board = initialize_board()
+def welcome_player():
+    prompt('Welcome to Tic-Tac-Toe. Best of 5 Wins!')
+    wait_for_input('Press enter to continue...')
 
-        while True:
+def wait_for_input(my_message):
+    prompt(f'{my_message}')
+    input().lower()
+
+def someone_won_series(num_player_wins, num_computer_wins):
+    wins_needed_to_win_series = math.ceil(TOTAL_NUMBER_OF_MATCHES / 2)
+
+    if num_player_wins >= wins_needed_to_win_series:
+        return True
+        
+    if num_computer_wins >= wins_needed_to_win_series:
+        return True
+
+    return False
+
+def detect_series_winner(num_player_wins, num_computer_wins):
+    if num_player_wins > num_computer_wins:
+        return PLAYER
+
+    if num_computer_wins > num_player_wins:
+        return COMPUTER
+
+    return TIE
+
+def display_round_number(round):
+    prompt(f'Round {round}, fight!')
+
+def display_current_series_score(player_wins, computer_wins, ties, round):
+    prompt(f'By round {round}, player has {player_wins} wins, computer has {computer_wins}, and there are {ties} ties.')
+
+def display_computer_wins(num_player_wins, num_computer_wins, num_of_ties):
+    prompt(f'Oh no! Computer wins! They won {num_computer_wins} and you won {num_player_wins}. There were {num_of_ties} ties')
+
+def display_player_wins(num_player_wins, num_computer_wins, num_of_ties):
+    prompt(f'You win! You won {num_player_wins} matches, and the computer won {num_computer_wins}. There were {num_of_ties} ties')
+
+def display_tie(num_player_wins, num_computer_wins):
+    prompt(f"It's a tie! You won {num_player_wins} matches, while the computer won {num_computer_wins}. There were {num_of_ties} ties")
+
+def play_tic_tac_toe():
+    
+    while True:
+
+        series_score = {
+            PLAYER: 0,
+            COMPUTER: 0,
+            TIE: 0,
+        }
+
+        welcome_player()
+
+        for round in range(1, 6):
+
+            display_round_number(round)
+
+            board = initialize_board()
+
+            while True:
+                display_board(board)
+
+                player_chooses_square(board)
+                if someone_won(board) or board_full(board):
+                    break
+
+                computer_chooses_square(board)
+                if someone_won(board) or board_full(board):
+                    break
+
             display_board(board)
 
-            player_chooses_square(board)
-            if someone_won(board) or board_full(board):
+            if someone_won(board):
+                winner = detect_winner(board)
+                series_score[winner] += 1
+                prompt(f"{winner} won!")
+            else:
+                series_score[TIE] += 1
+                prompt("It's a tie!")
+
+            if someone_won_series(series_score[PLAYER], series_score[COMPUTER]) or round >= 5:
+                series_winner = detect_series_winner(series_score[PLAYER], series_score[COMPUTER])
+
+                if series_winner == PLAYER:
+                    display_player_wins(series_score[PLAYER], series_score[COMPUTER], series_score[TIE])
+
+                if series_winner == COMPUTER:
+                    display_computer_wins(series_score[PLAYER], series_score[COMPUTER], series_score[TIE])
+
+                if series_winner == TIE:
+                    display_tie(series_score[PLAYER], series_score[COMPUTER], series_score[TIE])
+
                 break
 
-            computer_chooses_square(board)
-            if someone_won(board) or board_full(board):
-                break
+            display_current_series_score(series_score[PLAYER], series_score[COMPUTER], series_score[TIE], round)
 
-        display_board(board)
+            wait_for_input('Ready for the next round? Press enter to continue...')
 
-        if someone_won(board):
-            prompt(f"{detect_winner(board)} won!")
-        else:
-            prompt("It's a tie!")
+
         prompt("Play again? (y or n)")
         answer = input().lower()
 
