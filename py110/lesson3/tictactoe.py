@@ -214,11 +214,17 @@ def play_tic_tac_toe():
 
             wait_for_input('Ready for the next round? Press enter to continue...')
 
-
         prompt("Play again? (y or n)")
         answer = input().lower()
 
-        if answer[0] != 'y':
+        while len(answer) != 1 or answer[0] not in ['y', 'n']:
+            prompt("Try again, select either 'y' or 'n'")
+            answer = input().lower()
+
+        if answer[0] == 'n':
+            prompt"Thanks for playing!"
             break
+
+        prompt("Ready for the next round!")
 
 play_tic_tac_toe()
