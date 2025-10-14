@@ -11,11 +11,11 @@ PLAYER = 'Player'
 COMPUTER = 'Computer'
 TIE = 'Tie'
 
-#p 
-#e 
-#d 
-#a 
-#c 
+WINNING_LINES = [
+    [1, 2, 3], [4, 5, 6], [7, 8, 9],  # rows
+    [1, 4, 7], [2, 5, 8], [3, 6, 9],  # columns
+    [1, 5, 9], [3, 5, 7]              # diagonals
+]
 
 def join_or(my_array, my_delimitter = ", ", my_word = "or"):
     if len(my_array) == 0:
@@ -69,20 +69,31 @@ def player_chooses_square(board):
 def computer_chooses_square(board):
     if len(empty_squares(board)) == 0:
         return
+
+    defensive_tile = computer_get_defensive_tile(board)
+    if defensive_tile != None:
+        board[defensive_tile] = COMPUTER_MARKER
+        return
+
     square = random.choice(empty_squares(board))
     board[square] = COMPUTER_MARKER
 
 def board_full(board):
     return len(empty_squares(board)) == 0
 
-def detect_winner(board):
-    winning_lines = [
-        [1, 2, 3], [4, 5, 6], [7, 8, 9],  # rows
-        [1, 4, 7], [2, 5, 8], [3, 6, 9],  # columns
-        [1, 5, 9], [3, 5, 7]              # diagonals
-    ]
+def computer_get_defensive_tile(board):
+    for line in WINNING_LINES:
+        sq1, sq2, sq3 = line
+        if (board[sq1] == HUMAN_MARKER and board[sq2] == HUMAN_MARKER and board[sq3] == INITIAL_MARKER):
+            return sq3
+        elif (board[sq1] == HUMAN_MARKER and board[sq2] == INITIAL_MARKER and board[sq3] == HUMAN_MARKER):
+            return sq2
+        elif (board[sq1] == INITIAL_MARKER and board[sq2] ==  HUMAN_MARKER and board[sq3] == HUMAN_MARKER):
+            board[sq1] = COMPUTER_MARKER
+    return None
 
-    for line in winning_lines:
+def detect_winner(board):
+    for line in WINNING_LINES:
         sq1, sq2, sq3 = line
         if (board[sq1] == HUMAN_MARKER
                and board[sq2] == HUMAN_MARKER
