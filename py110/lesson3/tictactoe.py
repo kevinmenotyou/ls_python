@@ -70,7 +70,12 @@ def computer_chooses_square(board):
     if len(empty_squares(board)) == 0:
         return
 
-    defensive_tile = computer_get_defensive_tile(board)
+    offensive_tile = find_at_risk_square(board, COMPUTER_MARKER)
+    if offensive_tile != None:
+        board[offensive_tile] = COMPUTER_MARKER
+        return
+
+    defensive_tile = find_at_risk_square(board, HUMAN_MARKER)
     if defensive_tile != None:
         board[defensive_tile] = COMPUTER_MARKER
         return
@@ -81,15 +86,15 @@ def computer_chooses_square(board):
 def board_full(board):
     return len(empty_squares(board)) == 0
 
-def computer_get_defensive_tile(board):
+def find_at_risk_square(board, player_marker):
     for line in WINNING_LINES:
         sq1, sq2, sq3 = line
-        if (board[sq1] == HUMAN_MARKER and board[sq2] == HUMAN_MARKER and board[sq3] == INITIAL_MARKER):
+        if (board[sq1] == player_marker and board[sq2] == player_marker and board[sq3] == INITIAL_MARKER):
             return sq3
-        elif (board[sq1] == HUMAN_MARKER and board[sq2] == INITIAL_MARKER and board[sq3] == HUMAN_MARKER):
+        elif (board[sq1] == player_marker and board[sq2] == INITIAL_MARKER and board[sq3] == player_marker):
             return sq2
-        elif (board[sq1] == INITIAL_MARKER and board[sq2] ==  HUMAN_MARKER and board[sq3] == HUMAN_MARKER):
-            board[sq1] = COMPUTER_MARKER
+        elif (board[sq1] == INITIAL_MARKER and board[sq2] ==  player_marker and board[sq3] == player_marker):
+            return sq1
     return None
 
 def detect_winner(board):
