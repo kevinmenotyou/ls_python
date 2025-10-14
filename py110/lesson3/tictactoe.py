@@ -4,6 +4,8 @@ import pdb
 import random
 
 INITIAL_MARKER = ' '
+HUMAN_PLAYER = "Player"
+COMPUTER_PLAYER = "Computer"
 HUMAN_MARKER = 'X'
 COMPUTER_MARKER = 'O'
 TOTAL_NUMBER_OF_MATCHES = 5
@@ -82,6 +84,20 @@ def computer_chooses_square(board):
 
     square = random.choice(empty_squares(board))
     board[square] = COMPUTER_MARKER
+
+def choose_square(board, player):
+    if (player == HUMAN_PLAYER):
+        player_chooses_square(board)
+    elif (player == COMPUTER_PLAYER):
+        computer_chooses_square(board)
+    return None
+
+def alternate_player(current_player):
+    if current_player == HUMAN_PLAYER:
+        return COMPUTER_PLAYER
+    elif current_player == COMPUTER_PLAYER:
+        return HUMAN_PLAYER
+    return None
 
 def board_full(board):
     return len(empty_squares(board)) == 0
@@ -169,6 +185,8 @@ def play_tic_tac_toe():
 
         welcome_player()
 
+        current_player=HUMAN_PLAYER
+
         for round in range(1, 6):
 
             display_round_number(round)
@@ -178,11 +196,8 @@ def play_tic_tac_toe():
             while True:
                 display_board(board)
 
-                player_chooses_square(board)
-                if someone_won(board) or board_full(board):
-                    break
-
-                computer_chooses_square(board)
+                choose_square(board, current_player)
+                current_player = alternate_player(current_player)
                 if someone_won(board) or board_full(board):
                     break
 
@@ -222,7 +237,7 @@ def play_tic_tac_toe():
             answer = input().lower()
 
         if answer[0] == 'n':
-            prompt"Thanks for playing!"
+            prompt("Thanks for playing!")
             break
 
         prompt("Ready for the next round!")
