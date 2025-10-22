@@ -3,7 +3,7 @@ import random
 MAX_TOTAL = 21
 
 CARDS_AND_VALUES = {
-    'ace': {1, 11}
+    'ace': [1, 11],
     '2': 2,
     '3': 3,
     '4': 4,
@@ -55,10 +55,19 @@ def calculate_ace(current_total):
             return possible_ace_value
     return possible_ace_values[len(possible_ace_values)] # return smallest possible
 
+def calculate_hand_total(hand):
+    current_hand = hand.copy()
+    hand_total = [sum(card.value) for card in current_hand.values if card.number != 'ace']
+    number_of_aces = [sum for card in current_hand.values if card.number == 'ace']
+    for ace in range(0, number_of_aces):
+        hand_total += calculate_ace(current_total)
+    return hand_total
+
 def busted(dealt_cards):
-    total = 0
-    for card_name, in dealt_cards.index():
-        card.
+    if calculate_hand_total(dealt_cards) > 21:
+        return True
+    return False
+
 def player_loop(deck, player_hand):
     while True:
         answer = input("hit or stay?")
@@ -66,8 +75,8 @@ def player_loop(deck, player_hand):
             break
         if answer == 'hit':
             player_hand.update(deal_card(deck, 1))
-    if busted():
-        # probably end the game? or ask the user to play again?
+    if busted(player_hand):
+        prompt("You lose!")
     else:
         prompt("You chose to stay!")  # if player didn't bust,
                                     # must have stayed to get here
@@ -84,12 +93,15 @@ def dealer_loop(cards):
         prompt("Hello.")
 
 def display_hand(hand, hidden_card):
+    display_hand = hand.copy()
     if (hidden_card == True):
-        
+        display_hand[1] = "***"
         return
+    prompt(f'{display_hand}')
 
-
-def display_hands(player_hand, computer_hand):
+def display_hands(player_hand, dealer_hand):
+    print(f'Player: {display_hand(player_hand, False)}')
+    print(f'Dealer: {display_hand(dealer_hand, True)}')
 
 def game_loop():
     while True:
@@ -100,3 +112,5 @@ def game_loop():
         
         player_loop(deck)
         dealer_loop(deck)
+
+game_loop()
