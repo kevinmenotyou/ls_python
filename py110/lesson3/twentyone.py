@@ -26,14 +26,16 @@ SUITS = [
 ]
 
 def init_deck():
-    deck = {}
+    deck = []
     for suit in SUITS:
         for number, value in CARDS_AND_VALUES.items():
-            deck[f'{number}_of_{suit}']= {
-                'suit': suit,
-                'number': number,
-                'value': value,
-                }
+            deck.append(([f'{number}_of_{suit}'], 
+                    {
+                        'suit': suit,
+                        'number': number,
+                        'value': value,
+                    }
+            ))
     return deck
 
 def shuffle(deck):
@@ -79,7 +81,7 @@ def player_loop(deck, player_hand):
         prompt("You lose!")
     else:
         prompt("You chose to stay!")  # if player didn't bust,
-                                    # must have stayed to get here
+                                      # must have stayed to get here
 
 def dealer_loop(cards):
     dealer_total = 0
@@ -106,7 +108,9 @@ def display_hands(player_hand, dealer_hand):
 def game_loop():
     while True:
         deck = init_deck()
+        print(deck)
         shuffle(deck)
+        print(deck)
         player_hand = deal_card(deck, 2)
         dealer_hand = deal_card(deck, 2)
         
