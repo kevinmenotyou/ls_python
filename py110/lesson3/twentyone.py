@@ -25,6 +25,10 @@ SUITS = [
     'clubs'
 ]
 
+PLAYER='Player'
+DEALER='Dealer'
+TIE='Tie'
+
 def init_deck():
     deck = []
     for suit in SUITS:
@@ -57,18 +61,17 @@ def calculate_ace(current_total):
     possible_ace_values.sort(reverse=True)
     for possible_ace_value in possible_ace_values:
         if current_total + possible_ace_value <= MAX_TOTAL:
-            return possible_ace_value
-    return possible_ace_values[len(possible_ace_values)] # return smallest possible
+            return possible_ace_value # valid number found
+    return possible_ace_values[len(possible_ace_values) - 1] # we are going to bust, so pick the smallest ace value anyway
 
 def calculate_hand_total(hand):
     current_hand = hand.copy()
-
     hand_total = sum([card[1]['value'] for card in current_hand if card[1]['number'] != 'ace'])
-    number_of_aces = sum([sum(card) for card in current_hand if card[1]['number'] == 'ace'])
-    print(f'hand_total: {hand_total}')
+    number_of_aces = len([card for card in current_hand if card[1]['number'] == 'ace'])
+    print(f'Your total hand value is: {hand_total}')
     print(f'number_of_aces: {number_of_aces}')
     for ace in range(0, number_of_aces):
-        hand_total += calculate_ace(current_total)
+        hand_total += calculate_ace(hand_total)
     return hand_total
 
 def busted(hand):
@@ -78,48 +81,92 @@ def busted(hand):
 
 def player_loop(deck, player_hand):
     while True:
-        display_hand(player_hand)
-        answer = input("hit or stay?")
-        if answer == 'stay' or busted(player_hand):
+        display_player_hand(player_hand)
+        if busted(player_hand):
+            break
+        answer = input("hit or stay? ")
+        if answer == 'stay':
             break
         if answer == 'hit':
             player_hand.extend(deal_card(deck, 1))
     if busted(player_hand):
-        prompt("You lose!")
+        prompt(f"You went bust with ${calculate_hand_total(player_hand)} points!")
     else:
-        prompt("You chose to stay!")  # if player didn't bust,
-                                      # must have stayed to get here
+        prompt("You chose to stay!")  # if player didn't bust, they must have stayed to get here
 
 def dealer_loop(deck, dealer_hand):
-    dealer_total = 0
+    display_dealer_hand(dealer_hand)
+    dealer_total = calculate_hand_total(dealer_hand)
     while dealer_total <= 17:
-        #hit()
-        if busted():
+        dealer_hand.extend(deal_card(deck, 1))
+        prompt ("Dealer dealt himself another card!")
+        display_dealer_hand(dealer_hand)
+        if busted(dealer_hand):
             break
-    if busted():
-        prompt("Dealer Busted")
-    else:
-        prompt("Hello.")
+    if busted(dealer_hand):
+        prompt(f"Dealer went bust with ${calculate_hand_total(dealer_hand)} points!")
 
 def display_hand(hand, hidden_card = False):
     display_hand = hand.copy()
     if (hidden_card == True):
         display_hand[1] = "***"
-        return
-    prompt(f'{display_hand}')
+    for card in hand:
+        name = card[0]
+        display_name = name.split('_')
+        display_name[0] = display_name[0].capitalize()
+        display_name[2] = display_name[2].capitalize()
+        prompt(' '.join(display_name))
+
+def display_player_hand(player_hand):
+    print(f'Player hand:')
+    display_hand(player_hand, False)
+
+def display_dealer_hand(dealer_hand):
+    print(f'Dealer hand:')
+    display_hand(dealer_hand, True)
 
 def display_hands(player_hand, dealer_hand):
-    print(f'Player: {display_hand(player_hand, False)}')
-    print(f'Dealer: {display_hand(dealer_hand, True)}')
+    display_player_hand(player_hand)
+    display_dealer_hand(dealer_hand)
+
+def determine_winner(player_hand, dealer_hand):
+    player_total = calculate_hand_total(player_hand)
+    dealer_total = calculate_hand_total(dealer_hand)
+    if busted(dealer_hand) or player_total > dealer_total:
+        return PLAYER
+    if busted(player_hand) or dealer_total > player_total:
+        return DEALER
+    if player_total == dealer_total:
+        return TIE
+
+def display_result(player_hand, dealer_hand):
+    display_hands(player_hand, dealer_hand)
+    winner = determine_winner(player_hand, dealer_hand)
+    if winner == TIE:
+        prompt(f"It's a tie! Both {DEALER} and {PLAYER} had {calculate_hand_total(player_hand)}")
+    else:
+        prompt(f'{winner} won!')
 
 def game_loop():
+
+    prompt("Welcome to Black Jack!")
     while True:
         deck = init_deck()
         shuffle(deck)
         player_hand = deal_card(deck, 2)
         dealer_hand = deal_card(deck, 2)
-        
+
+        display_hands(player_hand, dealer_hand)
+
         player_loop(deck, player_hand)
-        # not implemented: dealer_loop(deck, dealer_hand)
+        if not busted(player_hand):
+            dealer_loop(deck, dealer_hand)
+
+        display_result(player_hand, dealer_hand)
+
+        answer = input("Do you want to play again? y/n")
+        if not answer == 'y' or not answer == 'Y':
+            prompt("Thanks for playing!")
+            break
 
 game_loop()
