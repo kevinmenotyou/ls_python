@@ -76,7 +76,7 @@ def prompt(message):
 
 def deal_card(deck, number_of_cards):
     dealt_cards = []
-    top_card_index = 1
+    top_card_index = -1
     for _ in range(0, number_of_cards):
         my_card = deck.pop(top_card_index)
         dealt_cards.append(my_card)
