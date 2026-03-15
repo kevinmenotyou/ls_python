@@ -1,4 +1,19 @@
+# feedback:
+# bugs:
+# [x] play again logic 
+# [x] calculate ace sort
+# other:
+# [] card display format
+# +-------+
+# |♦      |
+# |   A   |
+# |      ♦|
+# +-------+
+# [] data structure for deck complex
+# [] display_result function overloaded
+
 import random
+import time
 
 CARDS_AND_VALUES = {
     'ace': [1, 11],
@@ -68,7 +83,7 @@ def deal_card(deck, number_of_cards):
     return dealt_cards
 
 def calculate_ace(current_total):
-    possible_ace_values = CARDS_AND_VALUES['ace']
+    possible_ace_values = CARDS_AND_VALUES['ace'].copy()
     possible_ace_values.sort(reverse=True)
     for possible_ace_value in possible_ace_values:
         if current_total + possible_ace_value <= MAX_TOTAL:
@@ -104,25 +119,30 @@ def player_loop(deck, player_hand):
             player_hand.extend(deal_card(deck, 1))
             display_player_hand(player_hand)
         else:
-            prompt(f'Only {' '.join(HIT_ANSWERS)} {' '.join(STAY_ANSWERS)} are valid answers!')
+            prompt(f'Only {'/'.join(HIT_ANSWERS)}/{'/'.join(STAY_ANSWERS)} are valid answers!')
     if busted(total):
         prompt(f"You went bust with {total} points!")
+        time.sleep()
     else:
         # if player didn't bust, they must have stayed to get here
         prompt("You chose to stay!")
+        time.sleep()
 
 def dealer_loop(deck, dealer_hand):
     display_dealer_hand(dealer_hand)
     total = calculate_hand_total(dealer_hand)
+    time.sleep()
     while total <= DEALER_THRESHOLD:
         dealer_hand.extend(deal_card(deck, 1))
         total = calculate_hand_total(dealer_hand)
         prompt (f"Dealer dealt himself another card, his total is now {total}!")
         display_dealer_hand(dealer_hand)
+        time.sleep()
         if busted(total):
             break
     if busted(total):
         prompt(f"Dealer went bust with {total} points!")
+        time.sleep()
 
 def display_hand(hand, hidden_card = False):
     my_hand = hand.copy()
@@ -183,8 +203,10 @@ def display_result(player_hand, dealer_hand, score):
         prompt(f"It's a tie! Both {DEALER} and {PLAYER} had {player_total} points!")
     else:
         prompt(f'{winner} won!')
+    time.sleep()
     increment_score(score, winner)
     display_score(score)
+    time.sleep()
 
 def play_again():
     answer = ""
