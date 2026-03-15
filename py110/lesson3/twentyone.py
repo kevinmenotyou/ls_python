@@ -191,11 +191,11 @@ def play_again():
     while True:
         answer = input("Do you want to play again? y/n")
         if not (answer == 'y' or answer == 'Y'):
-            prompt("Thanks for playing!")
-            return False
-        if not (answer == 'n' or answer == 'N'):
             prompt("Ok, let's go!")
             return True
+        if not (answer == 'n' or answer == 'N'):
+            prompt("Thanks for playing!")
+            return False
         prompt('Only y/Y n/N are valid answers!')
 
 def game_loop():
