@@ -91,16 +91,20 @@ def busted(total):
     return False
 
 def player_loop(deck, player_hand):
+    HIT_ANSWERS=['h', 'H', 'hit', 'Hit']
+    STAY_ANSWERS=['s', 'S', 'stay', 'Stay']
     while True:
         total = calculate_hand_total(player_hand)
         if busted(total):
             break
         answer = input("hit or stay? ")
-        if answer == 'stay':
+        if answer in STAY_ANSWERS:
             break
-        if answer == 'hit':
+        if answer in HIT_ANSWERS:
             player_hand.extend(deal_card(deck, 1))
             display_player_hand(player_hand)
+        else:
+            prompt(f'Only {' '.join(HIT_ANSWERS)} {' '.join(STAY_ANSWERS)} are valid answers!')
     if busted(total):
         prompt(f"You went bust with {total} points!")
     else:
@@ -189,9 +193,10 @@ def play_again():
         if not (answer == 'y' or answer == 'Y'):
             prompt("Thanks for playing!")
             return False
-        if not (answer == 'n' or answer == 'n'):
+        if not (answer == 'n' or answer == 'N'):
             prompt("Ok, let's go!")
             return True
+        prompt('Only y/Y n/N are valid answers!')
 
 def game_loop():
 
