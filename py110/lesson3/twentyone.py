@@ -31,6 +31,14 @@ PLAYER='Player'
 DEALER='Dealer'
 TIE='Tie'
 
+NUM_OF_ROUNDS=5
+
+def init_score():
+    return {
+        PLAYER: 0,
+        DEALER: 0
+    }
+
 def init_deck():
     deck = []
     for suit in SUITS:
@@ -127,13 +135,13 @@ def display_player_hand(player_hand):
     print('Player hand:')
     display_hand(player_hand, False)
 
-def display_dealer_hand(dealer_hand):
+def display_dealer_hand(dealer_hand, hidden_card = True):
     print('Dealer hand:')
-    display_hand(dealer_hand, True)
+    display_hand(dealer_hand, hidden_card)
 
-def display_hands(player_hand, dealer_hand):
+def display_hands(player_hand, dealer_hand, hidden_card = True):
     display_player_hand(player_hand)
-    display_dealer_hand(dealer_hand)
+    display_dealer_hand(dealer_hand, hidden_card)
 
 def determine_winner(player_total, dealer_total):
     if busted(dealer_total) or (not busted(player_total) and player_total > dealer_total):
@@ -142,8 +150,27 @@ def determine_winner(player_total, dealer_total):
         return DEALER
     return TIE # player_total == dealer_total
 
-def display_result(player_hand, dealer_hand):
-    display_hands(player_hand, dealer_hand)
+def determine_best_of_winner(score):
+    if score[PLAYER] > score[DEALER]:
+        return PLAYER
+    if score[DEALER] > score[PLAYER]:
+        return DEALER
+    return TIE # player_total == dealer_total
+
+def increment_score(score, winner):
+    if winner == PLAYER:
+        score[PLAYER] = score[PLAYER] + 1
+    if winner == DEALER:
+        score[DEALER] = score[DEALER] + 1
+
+def display_score(score):
+    prompt(f'Current Round Score - {PLAYER} won {score[PLAYER]} and {DEALER} won {score[DEALER]}')
+
+def display_final_score(score):
+    prompt(f'Final Score - {PLAYER} won {score[PLAYER]} and {DEALER} won {score[DEALER]}')
+
+def display_result(player_hand, dealer_hand, score):
+    display_hands(player_hand, dealer_hand, False) # reveal cards
     player_total = calculate_hand_total(player_hand)
     dealer_total = calculate_hand_total(dealer_hand)
     winner = determine_winner(player_total, dealer_total)
@@ -151,32 +178,58 @@ def display_result(player_hand, dealer_hand):
         prompt(f"It's a tie! Both {DEALER} and {PLAYER} had {player_total} points!")
     else:
         prompt(f'{winner} won!')
+    increment_score(score, winner)
+    display_score(score)
 
-def game_loop():
-
-    prompt("Welcome to Black Jack!")
+def play_again():
+    answer = ""
     while True:
-        deck = init_deck()
-        shuffle(deck)
-        player_hand = deal_card(deck, 2)
-        dealer_hand = deal_card(deck, 2)
-
-        display_hands(player_hand, dealer_hand)
-
-        player_loop(deck, player_hand)
-        player_total = calculate_hand_total(player_hand)
-        print(NEW_LINE)
-
-        if not busted(player_total):
-            dealer_loop(deck, dealer_hand)
-        print(NEW_LINE)
-
-        display_result(player_hand, dealer_hand)
-        print(NEW_LINE)
-
         answer = input("Do you want to play again? y/n")
         if not (answer == 'y' or answer == 'Y'):
             prompt("Thanks for playing!")
+            return False
+        if not (answer == 'n' or answer == 'n'):
+            prompt("Ok, let's go!")
+            return True
+
+def game_loop():
+
+
+    print(NEW_LINE)
+    prompt(f"Welcome to Black Jack! Best of {NUM_OF_ROUNDS} wins!")
+    while True:
+        score = init_score()
+        for i in range(1, NUM_OF_ROUNDS + 1):
+            print(NEW_LINE)
+            prompt(f'Round {i}!')
+
+            deck = init_deck()
+            shuffle(deck)
+            player_hand = deal_card(deck, 2)
+            dealer_hand = deal_card(deck, 2)
+
+            display_hands(player_hand, dealer_hand)
+
+            player_loop(deck, player_hand)
+            player_total = calculate_hand_total(player_hand)
+            print(NEW_LINE)
+
+            if not busted(player_total):
+                dealer_loop(deck, dealer_hand)
+            print(NEW_LINE)
+
+            display_result(player_hand, dealer_hand, score)
+            print(NEW_LINE)
+
+        prompt(f'Best of {NUM_OF_ROUNDS} completed!')
+        display_score(score)
+        round_winner = determine_best_of_winner(score)
+        if round_winner == TIE:
+            prompt("It's a tie!")
+        else:
+            prompt(f'{round_winner} won!')
+
+        if not play_again():
             break
 
 game_loop()
