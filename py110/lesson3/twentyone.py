@@ -1,7 +1,5 @@
 import random
 
-MAX_TOTAL = 21
-
 CARDS_AND_VALUES = {
     'ace': [1, 11],
     '2': 2,
@@ -30,8 +28,11 @@ NEW_LINE='=========================='
 PLAYER='Player'
 DEALER='Dealer'
 TIE='Tie'
-
+DEALER_THRESHOLD=17
+MAX_TOTAL=21
 NUM_OF_ROUNDS=5
+
+
 
 def init_score():
     return {
@@ -85,7 +86,7 @@ def calculate_hand_total(hand):
     return total
 
 def busted(total):
-    if total > 21:
+    if total > MAX_TOTAL:
         return True
     return False
 
@@ -109,7 +110,7 @@ def player_loop(deck, player_hand):
 def dealer_loop(deck, dealer_hand):
     display_dealer_hand(dealer_hand)
     total = calculate_hand_total(dealer_hand)
-    while total <= 17:
+    while total <= DEALER_THRESHOLD:
         dealer_hand.extend(deal_card(deck, 1))
         total = calculate_hand_total(dealer_hand)
         prompt (f"Dealer dealt himself another card, his total is now {total}!")
